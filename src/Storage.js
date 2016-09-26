@@ -1,5 +1,6 @@
 const Storage = {
   
+  
   read(key) {
     const serializedData = localStorage[key];
     try {

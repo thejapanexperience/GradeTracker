@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import numeral from 'numeral';
-import ProductActions from '../actions/ProductActions';
+import GradeActions from '../actions/GradeActions';
 
 
-export default class ProductTable extends Component {
+export default class AssignmentTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -23,37 +22,36 @@ export default class ProductTable extends Component {
     this.setState({ editId })
   }
 
-  _saveEdit(product) {
-    let { name, price } = this.refs;
+  _saveEdit(assignment) {
+    let { name, score } = this.refs;
 
-    let newObject = Object.assign({}, product, {
+    let newObject = Object.assign({}, assignment, {
       name: name.value,
-      price: parseFloat(price.value)
+      score: parseFloat(score.value)
     });
 
     console.log(newObject) /*<----------FLUXIFY*/
-    ProductActions.edit(newObject);
-
+    GradeActions.edit(newObject);
 
     this._stopEdit(); 
   }
 
   render() {
-    const { products } = this.props;
+    const { assignments } = this.props;
     const { editId } = this.state;
 
     return (
       <table className="table">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Edit</th>
+            <th>Assignment</th>
+            <th>Score</th>
+            <th>Grade</th>
           </tr>
         </thead>
         <tbody>
-          {products.map(product => {
-            let { id, name, price } = product;
+          {assignments.map(assignment => {
+            let { id, name, score, grade } = assignment;
 
             if(id === editId) {
               return (
@@ -62,9 +60,9 @@ export default class ProductTable extends Component {
                     <input type="text" ref="name" defaultValue={name}/>
                   </td>
                   <td>
-                    <input type="number" ref="price" defaultValue={price} min="0" step="0.00" />
+                    <input type="number" ref="score" defaultValue={score} min="0" step="0" />
                   </td>
-                  <td><button onClick={this._saveEdit.bind(this, product)}>Save</button>
+                  <td><button onClick={this._saveEdit.bind(this, assignment)}>Save</button>
                   <button onClick={this._stopEdit} >Cancel</button>
                   </td>
                 </tr>
@@ -73,9 +71,9 @@ export default class ProductTable extends Component {
               return(
                   <tr key={id}>
                     <td>{name}</td>
-                    <td>{numeral(price).format('$0,0.00')}</td>
+                    <td>{score}</td>
+                    <td>{grade}</td>
                     <td>
-                      <button disabled={editId} onClick={this._startEdit.bind(this, id)} >Edit</button>
                     </td>
                   </tr>
                 )
